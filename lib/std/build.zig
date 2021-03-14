@@ -1333,6 +1333,7 @@ pub const LibExeObjStep = struct {
     version_script: ?[]const u8 = null,
     out_filename: []const u8,
     is_dynamic: bool,
+    is_static: bool,
     version: ?Version,
     build_mode: builtin.Mode,
     kind: Kind,
@@ -1519,6 +1520,7 @@ pub const LibExeObjStep = struct {
             .verbose_cc = false,
             .build_mode = builtin.Mode.Debug,
             .is_dynamic = is_dynamic,
+            .is_static = false,
             .kind = kind,
             .root_src = root_src,
             .name = name,
@@ -2401,6 +2403,9 @@ pub const LibExeObjStep = struct {
         }
         if (self.is_dynamic) {
             try zig_args.append("-dynamic");
+        }
+        if (self.is_static) {
+            try zig_args.append("-static");
         }
         if (self.bundle_compiler_rt) |x| {
             if (x) {
